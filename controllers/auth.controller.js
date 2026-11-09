@@ -66,7 +66,7 @@ async function register(req, res, next) {
         }
 
         // Password Hashing
-        const passwrodHash = argon2.hash(password);
+        const passwrodHash = await argon2.hash(password);
 
         // Create the user
         const user = await User.create({
@@ -74,7 +74,6 @@ async function register(req, res, next) {
             lastName: lastName.trim(),
             email: normalizeEmail,
             passwordHash: passwrodHash
-
             // other details are default
         });
 
@@ -120,7 +119,7 @@ async function login(req, res, next) {
 
         // Find User
         // Explicitly select passwordHash because it is hidden by default
-        const user = User.findOne({
+        const user = await User.findOne({
             email: normalizedEmail
         }).select("+passwordHash");
 
@@ -235,4 +234,3 @@ module.exports = {
     getMe,
     googleCallback
 };
-
